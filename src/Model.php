@@ -42,9 +42,9 @@ class Model
      */
     public function insertBook($title, $author, $synopsis, $image, $copies)
     {
-        $query = $this->pdo->prepare('INSERT INTO livres (titre, auteur, synopsis, image)
-            VALUES (?, ?, ?, ?)');
-        $this->execute($query, array($title, $author, $synopsis, $image));
+        $query = $this->pdo->prepare('INSERT INTO livres (titre, auteur, synopsis, image, copie)
+            VALUES (?, ?, ?, ?, ?)');
+        $this->execute($query, array($title, $author, $synopsis, $image, $copies));
 
         // TODO: Créer $copies exemplaires
     }
