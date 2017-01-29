@@ -1,0 +1,9 @@
+{% extends 'books.html.twig' %}
+{% block contents %}
+
+{% if book.image %}
+    <img src="{{ app.request.basepath }}/uploads/{{ book.image }}.jpg" />
+{% endif %}
+<span class="t">{{ book.synopsis }} </span><br>
+<a href="{{ path('books') }}"> Retour à la liste des livres </a>
+{% endblock %}

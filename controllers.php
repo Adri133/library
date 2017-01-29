@@ -12,13 +12,25 @@ $app->match('/books', function() use ($app) {
     ));
 })->bind('books');
 
+$app->match('/cardBooks', function() use ($app) {
+  //Question 3
+    $book = $_GET["book"];
+    return $app['twig']->render('cardBooks.html.twig', array(
+     'book' => $book)
+    );
+})->bind('cardBooks');
+
 $app->match('/admin', function() use ($app) {
     $request = $app['request'];
     $success = false;
     if ($request->getMethod() == 'POST') {
         $post = $request->request;
+        //Question 2
+        $admin1 = $app['config']['admin']['admin1'];
+        $admin2 = $app['config']['admin']['admin2'];
+        $admin3 = $app['config']['admin']['admin3'];
         if ($post->has('login') && $post->has('password') &&
-            array($post->get('login'), $post->get('password')) == ($app['config']['admin']['admin1'] || $app['config']['admin2']['admin2'] || $app['config']['admin3']['admin3'])) {
+            array($post->get('login'), $post->get('password')) == ($admin1 || $admin2 || $admin3)) {
             $app['session']->set('admin', true);
                 $success = true;
     }
@@ -66,11 +78,3 @@ $app->match('/addBook', function() use ($app) {
 
     return $app['twig']->render('addBook.html.twig');
 })->bind('addBook');
-
-// connect to Administrator
-// $app->match('/admin', function($success) use ($app) {
-// if($success = true) {
-//   return $app['twig']->render('layout.html.twig', array(
-//       'success' => $success
-// }
-// }
