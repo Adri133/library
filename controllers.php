@@ -16,8 +16,8 @@ $app->match('/cardBooks', function() use ($app) {
   //Question 3
     $book = $_GET["book"];
     return $app['twig']->render('cardBooks.html.twig', array(
-     'book' => $book)
-    );
+     'book' => $book
+   ));
 })->bind('cardBooks');
 
 $app->match('/admin', function() use ($app) {
