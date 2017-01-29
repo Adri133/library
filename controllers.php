@@ -20,12 +20,13 @@ $app->match('/admin', function() use ($app) {
         if ($post->has('login') && $post->has('password') &&
             array($post->get('login'), $post->get('password')) == $app['config']['admin']) {
             $app['session']->set('admin', true);
-            $success = true;
-        }
+                $success = true;
     }
+  }
     return $app['twig']->render('admin.html.twig', array(
-        'success' => $success
+      'success' => $success
     ));
+
 })->bind('admin');
 
 $app->match('/logout', function() use ($app) {
@@ -66,3 +67,10 @@ $app->match('/addBook', function() use ($app) {
     return $app['twig']->render('addBook.html.twig');
 })->bind('addBook');
 
+// connect to Administrator
+// $app->match('/admin', function($success) use ($app) {
+// if($success = true) {
+//   return $app['twig']->render('layout.html.twig', array(
+//       'success' => $success
+// }
+// }
