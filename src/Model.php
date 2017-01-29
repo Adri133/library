@@ -42,13 +42,25 @@ class Model
      */
     public function insertBook($title, $author, $synopsis, $image, $copies)
     {
-        $query = $this->pdo->prepare('INSERT INTO livres (titre, auteur, synopsis, image, copies)
-            VALUES (?, ?, ?, ?, ?)');
-        $this->execute($query, array($title, $author, $synopsis, $image, $copies));
+        $query = $this->pdo->prepare('INSERT INTO livres (titre, auteur, synopsis, image)
+            VALUES (?, ?, ?, ?)');
+        $this->execute($query, array($title, $author, $synopsis, $image));
 
-        // TODO: Créer $copies exemplaires
+
+        $query = $this->pdo->prepare('INSERT INTO exemplaires (book_id)
+            VALUES (?)');
+        $this->execute($query, array($copies));
     }
 
+    public function getBookSame($bookid)
+    {
+      $query = $this->pdo->prepare('SELECT livres.*, exemplaires.id as book_id FROM livres INNER JOIN exemplaires ON livres.id = exemplaires.book_id where livres.id = '.$bookid.'');
+
+      $this->execute($query);
+
+      return $query->fetchAll();
+      }
+  //
     /**
      * Getting all the books
      */

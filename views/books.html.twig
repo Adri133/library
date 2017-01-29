@@ -8,7 +8,7 @@
 
 {% for book in books %}
 
-<a class="book" href="{{ path('cardBooks', {'book': book }) }}">
+<a class="book" href="{{ path('cardBooks', {'bookId': book.id }) }}">
 
     {% if book.image %}
         <img src="{{ app.request.basepath }}/uploads/{{ book.image }}_small.jpg" />

@@ -14,11 +14,40 @@ $app->match('/books', function() use ($app) {
 
 $app->match('/cardBooks', function() use ($app) {
   //Question 3
-    $book = $_GET["book"];
+    $request = $app['request'];
+    $bookid = $_GET["bookId"];
+    $bookSame = $app['model']->getBookSame($bookid);
+    $count = 0;
+    foreach ($bookSame as $key) {
+      $count++;
+    }
+
     return $app['twig']->render('cardBooks.html.twig', array(
-     'book' => $book
+     'bookSame' => $bookSame, 'count' => $count
    ));
 })->bind('cardBooks');
+  //Question 6
+$app->match('/loanForm', function() use ($app) {
+  $book = $_GET["book"];
+  $request = $app['request'];
+  $success = false;
+  if ($request->getMethod() == 'POST') {
+      $post = $request->request;
+      $loanDate = new \DateTime();
+      $name = $_GET["name"];
+      $returnDate = $_GET["returnDate"];
+      if ($post->has('name') && $post->has('returnDate')) {
+           $post->get('name');
+           $post->get('returnDate');
+           $success = true;
+           $app['model']->insertBook($post->get('title'), $post->get('author'), $post->get('synopsis'),
+           $image, (int)$post->get('copies'));
+  }
+    }
+  return $app['twig']->render('loanForm.html.twig', array(
+   'book' => $book
+ ));
+})->bind('loanForm');
 
 $app->match('/admin', function() use ($app) {
     $request = $app['request'];
@@ -33,6 +62,7 @@ $app->match('/admin', function() use ($app) {
             array($post->get('login'), $post->get('password')) == ($admin1 || $admin2 || $admin3)) {
             $app['session']->set('admin', true);
                 $success = true;
+
     }
   }
     return $app['twig']->render('admin.html.twig', array(

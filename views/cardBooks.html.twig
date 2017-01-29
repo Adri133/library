@@ -1,20 +1,28 @@
 {% extends 'books.html.twig' %}
 {% block contents %}
 
-{% if book.image %}
-    <img src="{{ app.request.basepath }}/uploads/{{ book.image }}.jpg" />
+{#  {{dump(count)}} #}
+
+{% if bookSame[0]['image'] %}
+  <img src="{{ app.request.basepath }}/uploads/{{ bookSame[0].image }}.jpg" />
 {% endif %}
+
 <br>
-<span class="t">Synopsis : {{ book.synopsis }} </span><br>
-<span class="t">Nombres exemplaires : {{ book.copies }} </span><br>
-{% if book.copies !=0 %}
+<span class="t">Synopsis : {{ bookSame[0].synopsis }} </span><br>
+
+<span class="t">Nombres exemplaires : {{ count }} </span><br>
 <ul>
-  {% for copie in 1..book.copies %}
+  {% for book in bookSame %}
   <li class="t">
-      <span>Exemplaire disponibles : reférence : {{ copie }}</span>
-  </li>
-  {% endfor %}
+    <span>Exemplaire disponibles : reférence : {{ book.book_id }}</span>
+    {% if app.session.get('admin') %}
+    <a href="{{ path('loanForm', {'book' : book }) }}">
+    {% endif %}
+      <button class="btn btn-success" value="Emprunter"></button>
+    </a>
 </ul>
-{% endif %}
+<br>
+<br>
+{% endfor %}
 <a href="{{ path('books') }}"> Retour à la liste des livres </a>
 {% endblock %}
