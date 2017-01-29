@@ -18,7 +18,7 @@ $app->match('/admin', function() use ($app) {
     if ($request->getMethod() == 'POST') {
         $post = $request->request;
         if ($post->has('login') && $post->has('password') &&
-            array($post->get('login'), $post->get('password')) == $app['config']['admin']) {
+            array($post->get('login'), $post->get('password')) == ($app['config']['admin']['admin1'] || $app['config']['admin2']['admin2'] || $app['config']['admin3']['admin3'])) {
             $app['session']->set('admin', true);
                 $success = true;
     }
