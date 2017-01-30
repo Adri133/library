@@ -18,8 +18,10 @@ $app->match('/cardBooks', function() use ($app) {
     $bookid = $_GET["bookId"];
     $bookSame = $app['model']->getBookSame($bookid);
     $count = 0;
-    foreach ($bookSame as $key) {
-      $count++;
+    foreach ($bookSame as $key => $value) {
+      if ($value['dispo'] == '1' ) {
+        $count++;
+      }
     }
 
     return $app['twig']->render('cardBooks.html.twig', array(
