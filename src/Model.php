@@ -65,6 +65,11 @@ class Model
         $this->execute($query, array($name, $loanDate, $returnDate, $isReturn, $bookId));
     }
 
+    public function updateReturn($bookId) {
+        $query = $this->pdo->prepare("UPDATE emprunts SET emprunts.fini = 1 WHERE emprunts.exemplaire = $bookId");
+        $this->execute($query, array($bookId));
+    }
+
     public function getBookSame($bookid)
     {
       $query = $this->pdo->prepare('SELECT livres.*, exemplaires.id as book_id, emprunts.fini as dispo FROM livres INNER JOIN exemplaires ON livres.id = exemplaires.book_id INNER JOIN emprunts ON exemplaires.id = emprunts.exemplaire where livres.id = '.$bookid.'');

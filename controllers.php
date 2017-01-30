@@ -16,18 +16,35 @@ $app->match('/cardBooks', function() use ($app) {
   //Question 3
     $request = $app['request'];
     $bookid = $_GET["bookId"];
+    if ($request->getMethod() == 'POST') {
+      // $book = $_GET["book_id"];
+      $post = $request->request;
+      var_dump($post);
+      $app['model']->updateReturn($post->get('book_id'));
+    }
     $bookSame = $app['model']->getBookSame($bookid);
     $count = 0;
+    $dispo = true;
     foreach ($bookSame as $key => $value) {
       if ($value['dispo'] == '1' ) {
         $count++;
-      }
     }
+  }
 
     return $app['twig']->render('cardBooks.html.twig', array(
-     'bookSame' => $bookSame, 'count' => $count
+     'bookSame' => $bookSame, 'count' => $count, 'dispo' => $dispo
    ));
 })->bind('cardBooks');
+
+// $app->match('/return', function() use ($app) {
+//   $request = $app['request'];
+//   $book = $_GET["book"];
+//   var_dump($book);
+//   return $app['twig']->render('cardBooks.html.twig', array(
+//    'bookSame' => $bookSame, 'count' => $count
+//  ));
+// });
+
   //Question 6
 $app->match('/loanForm', function() use ($app) {
   $bookId = $_GET["book"]["book_id"];

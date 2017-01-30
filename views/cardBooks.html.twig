@@ -17,8 +17,8 @@
   <li class="t">
     <span class="t">Exemplaire disponibles : reférence : {{ book.book_id }}</span>
     {% if app.session.get('admin') %}
-      <a href="{{ path('loanForm', {'book' : book }) }}">
-      <button class="btn btn-success" >Emprunter</button>
+    <a href="{{ path('loanForm', {'book' : book }) }}">
+    <button class="btn btn-success" >Emprunter</button>
       </a>
     {% endif %}
     </li>
@@ -28,8 +28,11 @@
       <li class="t">
         <span class="text-danger">Exemplaire disponibles : reférence : {{ book.book_id }}</span>
         {% if app.session.get('admin') %}
-          <a href="{{ path('loanForm', {'book' : book }) }}">
-          <button class="btn btn-success" >Emprunter</button>
+        <a href="{{ path('cardBooks', {'bookId' : book.book_id }) }}">
+        <form id="form" method="post">
+        <input class="hidden" type="number" name="book_id" value="{{ book.book_id }}"/>
+        <input type="submit" class="btn btn-success" value="Retour livre" />
+        </form>
           </a>
 
         {% endif %}
