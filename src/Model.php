@@ -52,9 +52,31 @@ class Model
         $this->execute($query, array($copies));
     }
 
+    public function insertLoan($name, $bookId, $loanDate, $returnDate, $isReturn)
+    {
+        $query = $this->pdo->prepare('INSERT INTO emprunts (personne, exemplaire, debut, fin, fini)
+            VALUES (?, ?, ?, ?, ?)');
+        $this->execute($query, array($name, $bookId, $loanDate, $returnDate, $isReturn));
+    }
+
+    public function updateLoan($name, $loanDate, $returnDate, $isReturn, $bookId)
+    {
+        $query = $this->pdo->prepare("UPDATE emprunts SET emprunts.personne = '$name', emprunts.debut = '$loanDate', emprunts.fin = '$returnDate', emprunts.fini = '$isReturn' WHERE emprunts.exemplaire = $bookId");
+        $this->execute($query, array($name, $loanDate, $returnDate, $isReturn, $bookId));
+    }
+
     public function getBookSame($bookid)
     {
       $query = $this->pdo->prepare('SELECT livres.*, exemplaires.id as book_id FROM livres INNER JOIN exemplaires ON livres.id = exemplaires.book_id where livres.id = '.$bookid.'');
+
+      $this->execute($query);
+
+      return $query->fetchAll();
+      }
+
+    public function isInDb($bookId)
+    {
+      $query = $this->pdo->prepare('SELECT emprunts.* FROM emprunts WHERE exemplaire = '.$bookId.'');
 
       $this->execute($query);
 

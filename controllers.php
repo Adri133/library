@@ -28,24 +28,33 @@ $app->match('/cardBooks', function() use ($app) {
 })->bind('cardBooks');
   //Question 6
 $app->match('/loanForm', function() use ($app) {
-  $book = $_GET["book"];
+  $bookId = $_GET["book"]["book_id"];
   $request = $app['request'];
   $success = false;
+  $loanDate = (new \DateTime())->setTimeZone(new DateTimeZone('Europe/Berlin'));
+  $loanDateDisplay = $loanDate->format("Y-m-d H:i:s");;
+  var_dump($loanDateDisplay);
+
   if ($request->getMethod() == 'POST') {
       $post = $request->request;
-      $loanDate = new \DateTime();
-      $name = $_GET["name"];
-      $returnDate = $_GET["returnDate"];
       if ($post->has('name') && $post->has('returnDate')) {
-           $post->get('name');
-           $post->get('returnDate');
-           $success = true;
-           $app['model']->insertBook($post->get('title'), $post->get('author'), $post->get('synopsis'),
-           $image, (int)$post->get('copies'));
-  }
+          $isReturn = 0;
+          $arrayIsInDb = $app['model']->isInDb($bookId);
+          if (sizeof($arrayIsInDb) > 0) {
+            $app['model']->updateLoan($post->get('name'), $loanDateDisplay,
+            $post->get('returnDate'), $isReturn, $bookId);
+              $success = true;
+          }
+            else {
+            $app['model']->insertLoan($post->get('name'), (int)$bookId, $loanDateDisplay,
+            $post->get('returnDate'), $isReturn);
+            $success = true;
+          }
+         }
     }
   return $app['twig']->render('loanForm.html.twig', array(
-   'book' => $book
+   'success' => $success,
+   'loanDateDisplay' => $loanDateDisplay
  ));
 })->bind('loanForm');
 
